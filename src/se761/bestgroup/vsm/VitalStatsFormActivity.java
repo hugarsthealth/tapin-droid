@@ -12,8 +12,6 @@ import se761.bestgroup.vsm.formpages.Page4Fragment;
 import se761.bestgroup.vsm.formpages.Page5Fragment;
 import se761.bestgroup.vsm.model.Keys;
 import se761.bestgroup.vsm.model.PatientModel;
-
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -35,41 +33,41 @@ public class VitalStatsFormActivity extends Activity {
 	private PatientModel _model;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_view_pager);
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
-		SharedPreferences sharedPreferences = getSharedPreferences(Keys.VSM,
+		final SharedPreferences sharedPreferences = getSharedPreferences(Keys.VSM,
 				MODE_PRIVATE);
 
-		String jsonString = sharedPreferences.getString(Keys.MODEL,
+		final String jsonString = sharedPreferences.getString(Keys.MODEL,
 				null);
 
-		_model = new PatientModel();
+		this._model = new PatientModel();
 
 		if (jsonString != null) {
 			Log.d("VSM", "Deserializing saved model");
 
 			try {
-				_model.fromJSON(jsonString);
+				this._model.fromJSON(jsonString);
 
-			} catch (JSONException e) {
+			} catch (final JSONException e) {
 				e.printStackTrace();
 			}
 		} else {
 			Log.d("VSM", "Blank Model");
 		}
 
-		_viewPager = (ViewPager) findViewById(R.id.pager);
-		_pagerAdapter = new SliderAdapter(getFragmentManager());
-		_viewPager.setAdapter(_pagerAdapter);
-		_viewPager
+		this._viewPager = (ViewPager) findViewById(R.id.pager);
+		this._pagerAdapter = new SliderAdapter(getFragmentManager());
+		this._viewPager.setAdapter(this._pagerAdapter);
+		this._viewPager
 				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 					@Override
-					public void onPageSelected(int position) {
+					public void onPageSelected(final int position) {
 						VitalStatsFormActivity.this.setTitle("Page "
 								+ (position + 1) + "/5");
 						invalidateOptionsMenu();
@@ -79,21 +77,21 @@ public class VitalStatsFormActivity extends Activity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(final Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.activity_screen_slide, menu);
 
 		menu.findItem(R.id.action_previous).setEnabled(
-				_viewPager.getCurrentItem() > 0);
+				this._viewPager.getCurrentItem() > 0);
 
 		// Add either a "next" or "finish" button to the action bar, depending
 		// on which page
 		// is currently selected.
-		MenuItem item = menu
-				.add(Menu.NONE, (_viewPager.getCurrentItem() == _pagerAdapter
+		final MenuItem item = menu
+				.add(Menu.NONE, (this._viewPager.getCurrentItem() == this._pagerAdapter
 						.getCount() - 1) ? R.id.action_finish
 						: R.id.action_next, 2,
-						(_viewPager.getCurrentItem() == _pagerAdapter
+						(this._viewPager.getCurrentItem() == this._pagerAdapter
 								.getCount() - 1) ? R.string.action_finish
 								: R.string.action_next);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
@@ -104,51 +102,52 @@ public class VitalStatsFormActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		
+
 		// Save the model's state
-		Editor preferencesEditor = getSharedPreferences(Keys.VSM, MODE_PRIVATE)
+		final Editor preferencesEditor = getSharedPreferences(Keys.VSM, MODE_PRIVATE)
 				.edit();
-		Log.i("VSMOnPause", _model.toJSON().toString());
-		preferencesEditor.putString(Keys.MODEL, _model.toJSON()
+		Log.i("VSMOnPause", this._model.toJSON().toString());
+		preferencesEditor.putString(Keys.MODEL, this._model.toJSON()
 				.toString());
 		preferencesEditor.commit();
 		Log.d("VSM", "Serializing and saving model");
 	}
 
-	public boolean onOptionsItemSelected(MenuItem item) {
+	@Override
+	public boolean onOptionsItemSelected(final MenuItem item) {
 
-		Intent parentActivityIntent = new Intent(this, MenuActivity.class);
+		final Intent parentActivityIntent = new Intent(this, MenuActivity.class);
 		parentActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 				| Intent.FLAG_ACTIVITY_NEW_TASK);
 
 		switch (item.getItemId()) {
 
-		case R.id.action_previous:
-			// Go to the previous step in the wizard. If there is no previous
-			// step,
-			// setCurrentItem will do nothing.
-			_viewPager.setCurrentItem(_viewPager.getCurrentItem() - 1);
-			return true;
+			case R.id.action_previous:
+				// Go to the previous step in the wizard. If there is no previous
+				// step,
+				// setCurrentItem will do nothing.
+				this._viewPager.setCurrentItem(this._viewPager.getCurrentItem() - 1);
+				return true;
 
-		case R.id.action_next:
-			// Advance to the next step in the wizard. If there is no next step,
-			// setCurrentItem
-			// will do nothing.
-			_viewPager.setCurrentItem(_viewPager.getCurrentItem() + 1);
-			return true;
+			case R.id.action_next:
+				// Advance to the next step in the wizard. If there is no next step,
+				// setCurrentItem
+				// will do nothing.
+				this._viewPager.setCurrentItem(this._viewPager.getCurrentItem() + 1);
+				return true;
 
-		case R.id.action_finish:
+			case R.id.action_finish:
 
-			startActivity(parentActivityIntent);
-			finish();
-			return true;
+				startActivity(parentActivityIntent);
+				finish();
+				return true;
 
-		case android.R.id.home:
-			// This is called when the Home (Up) button is pressed
-			// in the Action Bar.
-			startActivity(parentActivityIntent);
-			finish();
-			return true;
+			case android.R.id.home:
+				// This is called when the Home (Up) button is pressed
+				// in the Action Bar.
+				startActivity(parentActivityIntent);
+				finish();
+				return true;
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -156,28 +155,28 @@ public class VitalStatsFormActivity extends Activity {
 
 	private class SliderAdapter extends FragmentPagerAdapter {
 
-		private List<Fragment> _pages;
+		private final List<Fragment> _pages;
 
-		public SliderAdapter(FragmentManager fragmentManager) {
+		public SliderAdapter(final FragmentManager fragmentManager) {
 			super(fragmentManager);
-			_pages = new ArrayList<Fragment>();
+			this._pages = new ArrayList<Fragment>();
 
-			_pages.add(Page1Fragment.newInstance(_model));
-			_pages.add(Page2Fragment.newInstance(_model));
-			_pages.add(Page3Fragment.newInstance(_model));
-			_pages.add(Page4Fragment.newInstance(_model));
-			_pages.add(Page5Fragment.newInstance(_model));
+			this._pages.add(Page1Fragment.newInstance(VitalStatsFormActivity.this._model));
+			this._pages.add(Page2Fragment.newInstance(VitalStatsFormActivity.this._model));
+			this._pages.add(Page3Fragment.newInstance(VitalStatsFormActivity.this._model));
+			this._pages.add(Page4Fragment.newInstance(VitalStatsFormActivity.this._model));
+			this._pages.add(Page5Fragment.newInstance(VitalStatsFormActivity.this._model));
 
 		}
 
 		@Override
-		public Fragment getItem(int page) {
-			return _pages.get(page);
+		public Fragment getItem(final int page) {
+			return this._pages.get(page);
 		}
 
 		@Override
 		public int getCount() {
-			return _pages.size();
+			return this._pages.size();
 		}
 
 	}

@@ -22,25 +22,25 @@ public class AddAllergyDialogFragment extends DialogFragment {
 	}
 
 	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
+	public Dialog onCreateDialog(final Bundle savedInstanceState) {
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-		View view = layoutInflater.inflate(R.layout.add_allergy_dialog, null);
+		final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
+		final View view = layoutInflater.inflate(R.layout.add_allergy_dialog, null);
 		final EditText alergyInput = (EditText) view
 				.findViewById(R.id.addAlergyInput);
 		builder.setView(view).setTitle("Add an Allergy")
 				.setPositiveButton("Add", new OnClickListener() {
 
 					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						_listener.onPositiveClick(alergyInput.getText()
+					public void onClick(final DialogInterface dialog, final int which) {
+						AddAllergyDialogFragment.this._listener.onPositiveClick(alergyInput.getText()
 								.toString());
 					}
 				}).setNegativeButton("Cancel", new OnClickListener() {
 
 					@Override
-					public void onClick(DialogInterface dialog, int which) {
+					public void onClick(final DialogInterface dialog, final int which) {
 						getDialog().cancel();
 						// Same as pressing the back button
 					}
@@ -50,23 +50,23 @@ public class AddAllergyDialogFragment extends DialogFragment {
 		alergyInput.addTextChangedListener(new TextWatcher() {
 
 			@Override
-			public void afterTextChanged(Editable s) {
+			public void afterTextChanged(final Editable s) {
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
+			public void beforeTextChanged(final CharSequence s, final int start, final int count,
+					final int after) {
 			}
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
+			public void onTextChanged(final CharSequence s, final int start, final int before,
+					final int count) {
 				if (PatientModel.isValidAllergy(s.toString())) {
 					alergyInput.setError(null);
-					dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(
+					dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(
 							true);
 				} else {
-					dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(
+					dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(
 							false);
 					alergyInput.setError("You can't use semicolons");
 				}
@@ -77,7 +77,7 @@ public class AddAllergyDialogFragment extends DialogFragment {
 		return dialog;
 	}
 
-	public void setAddAlergyDialogListener(AddAlergyDiaglogListener listener) {
+	public void setAddAlergyDialogListener(final AddAlergyDiaglogListener listener) {
 		this._listener = listener;
 
 	}
