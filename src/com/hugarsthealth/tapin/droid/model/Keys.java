@@ -13,8 +13,8 @@ public class Keys {
 	public static final String DOB = "dob";
 	
 	// Vital Info	
-	public static final String VITAL_STATS_MODEL = "vitalinfo";
-	public static final String CHECK_IN_TIME = "check_in_time";
+	public static final String VITAL_STATS_MODEL = "checkin";
+	public static final String CHECK_IN_TIME = "checkin_time";
 	public static final String WEIGHT_UNIT = "weight_unit";
 	public static final String WEIGHT_VALUE = "weight_value";
 	public static final String HEIGHT_UNIT = "height_unit";
@@ -30,8 +30,8 @@ public class Keys {
 	
 	// APP
 	public static final String MODEL = "model";	
-	public static final String VSM = "vsm";	
-	public static final String PACKAGE = "application/se761.bestgroup.vsmreceiver";
+	public static final String VSM = "droid";	
+	public static final String PACKAGE = "application/com.hugarsthealth.tapin.receiver";
 	
 	
 }
